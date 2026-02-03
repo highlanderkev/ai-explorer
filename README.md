@@ -139,9 +139,9 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 - [GenUI Package on pub.dev](https://pub.dev/packages/genui)
 - [GenUI Firebase AI on pub.dev](https://pub.dev/packages/genui_firebase_ai)
-- [Flutter GenUI Documentation](https://docs.flutter.dev/ai/genui)
+- Flutter GenUI Documentation (coming soon)
 - [Firebase AI Documentation](https://firebase.google.com/docs/ai)
-- [GenUI GitHub Repository](https://github.com/flutter/genui)
+- GenUI GitHub Repository (planned; open-sourcing in progress)
 
 ## License
 
