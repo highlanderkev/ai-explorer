@@ -1,0 +1,82 @@
+# Metadata for AI Explorer
+
+## Project Information
+- **Name**: AI Explorer
+- **Package Name**: ai_explorer
+- **Version**: 1.0.0+1
+- **Description**: A Flutter application showcasing generative AI capabilities using GenUI and Firebase AI
+
+## Repository
+- **URL**: https://github.com/highlanderkev/ai-explorer
+- **Issue Tracker**: https://github.com/highlanderkev/ai-explorer/issues
+
+## Author
+- **GitHub**: @highlanderkev
+
+## License
+- **Type**: MIT License
+- **File**: LICENSE
+
+## Platform Support
+- ✅ Android
+- ✅ iOS
+- ⚠️ Web (Experimental)
+- ⚠️ macOS (Experimental)
+- ❌ Windows (Not yet configured)
+- ❌ Linux (Not yet configured)
+
+## Key Dependencies
+- flutter: SDK
+- genui: ^0.1.0
+- genui_firebase_ai: ^0.1.0
+- firebase_core: ^3.11.0
+- firebase_ai: ^0.1.0
+
+## Minimum Requirements
+- Flutter SDK: 3.0.0 or higher
+- Dart SDK: 3.0.0 or higher
+- Android: API 21 (Android 5.0) or higher
+- iOS: iOS 12.0 or higher
+
+## Features
+- Dynamic UI generation with GenUI
+- Firebase AI integration (Gemini)
+- Interactive chat interface
+- Multiple example use cases
+- Material Design 3
+- Comprehensive documentation
+
+## Status
+- **Development Stage**: Alpha
+- **Production Ready**: No
+- **API Stability**: Unstable (using alpha packages)
+
+## Categories
+- Generative AI
+- Flutter
+- Firebase
+- UI/UX
+- Machine Learning
+- Educational
+
+## Tags
+- genui
+- firebase-ai
+- gemini
+- flutter
+- generative-ui
+- ai-powered
+- dynamic-ui
+- experimental
+
+## Related Projects
+- [GenUI](https://github.com/flutter/genui)
+- [Firebase Flutter](https://github.com/firebase/flutterfire)
+
+## Documentation Files
+- README.md - Project overview
+- SETUP.md - Setup instructions
+- USAGE.md - Usage guide
+- CONTRIBUTING.md - Contribution guidelines
+- FIREBASE_CONFIG.md - Firebase setup
+- CHANGELOG.md - Version history
