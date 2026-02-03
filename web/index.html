@@ -30,7 +30,9 @@
     }
 
     if ('serviceWorker' in navigator) {
-      var serviceWorkerUrl = 'flutter_service_worker.js?v=' + serviceWorkerVersion;
+      var serviceWorkerUrl = serviceWorkerVersion 
+        ? 'flutter_service_worker.js?v=' + serviceWorkerVersion
+        : 'flutter_service_worker.js';
       navigator.serviceWorker.register(serviceWorkerUrl)
         .then((reg) => {
           function waitForActivation(serviceWorker) {
@@ -43,7 +45,7 @@
           }
           if (!reg.active && (reg.installing || reg.waiting)) {
             waitForActivation(reg.installing || reg.waiting);
-          } else if (reg.active && !reg.active.scriptURL.endsWith(serviceWorkerVersion)) {
+          } else if (reg.active && serviceWorkerVersion && !reg.active.scriptURL.endsWith(serviceWorkerVersion)) {
             reg.update();
             waitForActivation(reg.installing);
           } else {
