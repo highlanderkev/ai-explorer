@@ -13,9 +13,9 @@ void main() async {
   } catch (e) {
     // Firebase initialization failed - this is expected if credentials haven't been configured
     // See FIREBASE_CONFIG.md for setup instructions
-    debugPrint('⚠️ Firebase initialization error: $e');
-    debugPrint('💡 To enable Firebase features, configure your credentials in lib/firebase_options.dart');
-    debugPrint('📖 See FIREBASE_CONFIG.md for detailed setup instructions');
+    debugPrint('WARNING: Firebase initialization error: $e');
+    debugPrint('TIP: To enable Firebase features, configure your credentials in lib/firebase_options.dart');
+    debugPrint('INFO: See FIREBASE_CONFIG.md for detailed setup instructions');
   }
   
   runApp(const AIExplorerApp());
