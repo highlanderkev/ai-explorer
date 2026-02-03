@@ -1,4 +1,5 @@
 buildscript {
+    // Using stable Kotlin version compatible with Flutter
     ext.kotlin_version = '1.9.10'
     repositories {
         google()
@@ -6,6 +7,7 @@ buildscript {
     }
 
     dependencies {
+        // Using stable Android Gradle Plugin version
         classpath "com.android.tools.build:gradle:8.1.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }

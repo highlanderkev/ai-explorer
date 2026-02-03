@@ -41,6 +41,9 @@ class DefaultFirebaseOptions {
     }
   }
 
+  // TODO: Replace these placeholder values with your actual Firebase credentials
+  // Run 'flutterfire configure' to automatically generate this file
+  // or manually update with values from Firebase Console
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'YOUR_WEB_API_KEY',
     appId: '1:YOUR_APP_ID:web:YOUR_WEB_APP_ID',
@@ -50,6 +53,7 @@ class DefaultFirebaseOptions {
     storageBucket: 'your-project-id.appspot.com',
   );
 
+  // TODO: Replace with your Firebase Android credentials
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'YOUR_ANDROID_API_KEY',
     appId: '1:YOUR_APP_ID:android:YOUR_ANDROID_APP_ID',
@@ -58,6 +62,7 @@ class DefaultFirebaseOptions {
     storageBucket: 'your-project-id.appspot.com',
   );
 
+  // TODO: Replace with your Firebase iOS credentials
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'YOUR_IOS_API_KEY',
     appId: '1:YOUR_APP_ID:ios:YOUR_IOS_APP_ID',
@@ -67,6 +72,7 @@ class DefaultFirebaseOptions {
     iosBundleId: 'com.example.aiExplorer',
   );
 
+  // TODO: Replace with your Firebase macOS credentials
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'YOUR_MACOS_API_KEY',
     appId: '1:YOUR_APP_ID:ios:YOUR_MACOS_APP_ID',

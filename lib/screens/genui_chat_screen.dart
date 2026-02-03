@@ -97,8 +97,19 @@ Be creative and helpful in designing interfaces that match the user's intent.
       // Send message to GenUI conversation
       await _conversation.sendMessage(message);
       
-      // In a real implementation, you would listen to the conversation stream
-      // and update the UI with the generated content
+      // TODO: Production implementation needed
+      // In a production app, you would:
+      // 1. Listen to _conversation.stream for AI responses
+      // 2. Extract generated UI components from the response
+      // 3. Render them using GenUI's rendering system
+      // 4. Handle user interactions with generated UI
+      // Example:
+      // _conversation.stream.listen((response) {
+      //   setState(() {
+      //     // Update UI with response.generatedWidget
+      //   });
+      // });
+      
       _addMessage(
         'AI Assistant',
         'I received your request. In a production app, dynamic UI would be generated here based on your message.',

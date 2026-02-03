@@ -6,6 +6,7 @@ plugins {
 
 android {
     namespace = "com.example.ai_explorer"
+    // Using Flutter's recommended SDK version
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
