@@ -95,8 +95,8 @@ The AI will generate:
 ''',
           ),
           const SizedBox(height: 24),
-          const Card(
-            color: Colors.blue,
+          Card(
+            color: Theme.of(context).colorScheme.primary,
             child: Padding(
               padding: EdgeInsets.all(16),
               child: Column(
