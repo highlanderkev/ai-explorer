@@ -10,11 +10,12 @@ class GenUIChatScreen extends StatefulWidget {
 }
 
 class _GenUIChatScreenState extends State<GenUIChatScreen> {
-  late GenUiManager _genUiManager;
+  late A2uiMessageProcessor _a2uiMessageProcessor;
   late FirebaseAiContentGenerator _contentGenerator;
   late GenUiConversation _conversation;
   final TextEditingController _messageController = TextEditingController();
   final List<ChatMessage> _messages = [];
+  final List<String> _surfaceIds = [];
   bool _isInitialized = false;
   String? _error;
 
@@ -27,11 +28,10 @@ class _GenUIChatScreenState extends State<GenUIChatScreen> {
   Future<void> _initializeGenUI() async {
     try {
       // Create a catalog of widgets that GenUI can use
-      final catalog = CoreCatalogItems.asCatalog().copyWith([
-        // Add custom catalog items here if needed
-      ]);
+      final catalog = CoreCatalogItems.asCatalog();
 
-      _genUiManager = GenUiManager(catalog: catalog);
+      // Create the A2UI message processor
+      _a2uiMessageProcessor = A2uiMessageProcessor(catalogs: [catalog]);
 
       // Initialize Firebase AI content generator
       _contentGenerator = FirebaseAiContentGenerator(
@@ -43,9 +43,12 @@ Be creative and helpful in designing interfaces that match the user's intent.
 ''',
       );
 
+      // Create the GenUI conversation
       _conversation = GenUiConversation(
-        genUiManager: _genUiManager,
+        a2uiMessageProcessor: _a2uiMessageProcessor,
         contentGenerator: _contentGenerator,
+        onSurfaceAdded: _onSurfaceAdded,
+        onSurfaceDeleted: _onSurfaceDeleted,
       );
 
       setState(() {
@@ -65,6 +68,20 @@ Be creative and helpful in designing interfaces that match the user's intent.
       });
       debugPrint('GenUI initialization error: $e');
     }
+  }
+
+  void _onSurfaceAdded(SurfaceAdded update) {
+    setState(() {
+      _surfaceIds.add(update.surfaceId);
+    });
+    debugPrint('Surface added: ${update.surfaceId}');
+  }
+
+  void _onSurfaceDeleted(SurfaceRemoved update) {
+    setState(() {
+      _surfaceIds.remove(update.surfaceId);
+    });
+    debugPrint('Surface removed: ${update.surfaceId}');
   }
 
   void _addMessage(String sender, String content, {required bool isUser}) {
@@ -95,19 +112,7 @@ Be creative and helpful in designing interfaces that match the user's intent.
 
     try {
       // Send message to GenUI conversation
-      await _conversation.sendMessage(message);
-
-      // Listen for the first AI response from the conversation stream
-      final response = await _conversation.stream.first;
-
-      // Render the AI response in the chat. In a more advanced implementation,
-      // you could inspect the response object to extract generated UI components
-      // and render them with GenUI's rendering system.
-      _addMessage(
-        'AI Assistant',
-        response.toString(),
-        isUser: false,
-      );
+      _conversation.sendRequest(UserMessage.text(message));
     } catch (e) {
       _addMessage(
         'Error',
@@ -146,10 +151,23 @@ Be creative and helpful in designing interfaces that match the user's intent.
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.all(16),
-              itemCount: _messages.length,
+              itemCount: _messages.length + _surfaceIds.length,
               itemBuilder: (context, index) {
-                final message = _messages[index];
-                return _buildMessageBubble(message);
+                // Show chat messages first, then generated surfaces
+                if (index < _messages.length) {
+                  final message = _messages[index];
+                  return _buildMessageBubble(message);
+                } else {
+                  final surfaceIndex = index - _messages.length;
+                  final surfaceId = _surfaceIds[surfaceIndex];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: GenUiSurface(
+                      host: _conversation.host,
+                      surfaceId: surfaceId,
+                    ),
+                  );
+                }
               },
             ),
           ),
@@ -237,6 +255,7 @@ Be creative and helpful in designing interfaces that match the user's intent.
   @override
   void dispose() {
     _messageController.dispose();
+    _conversation.dispose();
     super.dispose();
   }
 }
