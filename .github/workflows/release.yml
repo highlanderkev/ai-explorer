@@ -35,13 +35,13 @@ jobs:
       - name: Download Android artifact
         uses: actions/download-artifact@v4.1.8
         with:
-          name: ${{ needs.package.outputs['web-artifact'] }}
+          name: ${{ needs.package.outputs.android_artifact }}
           path: dist/
 
-      - name: Download Android artifact
+      - name: Download iOS artifact
         uses: actions/download-artifact@v4.1.8
         with:
-          name: ${{ needs.package.outputs['android-artifact'] }}
+          name: ${{ needs.package.outputs.ios_artifact }}
           path: dist/
 
       - name: Extract changelog entry

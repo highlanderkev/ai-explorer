@@ -9,12 +9,12 @@ on:
         type: string
         default: ''
     outputs:
-      android-artifact:
+      android_artifact:
         description: 'Name of the uploaded Android artifact'
-        value: ${{ jobs.build_android.outputs.artifact-name }}
-      ios-artifact:
+        value: ${{ jobs.build_android.outputs.artifact_name }}
+      ios_artifact:
         description: 'Name of the uploaded iOS artifact'
-        value: ${{ jobs.build_ios.outputs.artifact-name }}
+        value: ${{ jobs.build_ios.outputs.artifact_name }}
   workflow_dispatch:
     inputs:
       version:
@@ -30,7 +30,7 @@ jobs:
     name: Build Android APK
     runs-on: ubuntu-latest
     outputs:
-      artifact-name: ${{ steps.set-output.outputs.artifact-name }}
+      artifact_name: ${{ steps.set_output.outputs.artifact_name }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -56,6 +56,12 @@ jobs:
           VERSION="${{ inputs.version }}"
           # Strip leading 'v' if present (e.g. v1.0.0 -> 1.0.0)
           VERSION="${VERSION#v}"
+          # Append run number as build number if no '+<build>' is present,
+          # so the Flutter build number (and Android versionCode) increments
+          # with every CI run and APKs remain upgradable over previous releases.
+          if [[ "${VERSION}" != *'+'* ]]; then
+            VERSION="${VERSION}+${{ github.run_number }}"
+          fi
           sed -i "s/^version: .*/version: ${VERSION}/" pubspec.yaml
 
       - name: Build Android APK (release)
@@ -65,8 +71,8 @@ jobs:
         run: cp build/app/outputs/flutter-apk/app-release.apk ai-explorer.apk
 
       - name: Set artifact name output
-        id: set-output
-        run: echo "artifact-name=ai-explorer-android" >> "$GITHUB_OUTPUT"
+        id: set_output
+        run: echo "artifact_name=ai-explorer-android" >> "$GITHUB_OUTPUT"
 
       - name: Upload Android artifact
         uses: actions/upload-artifact@v4
@@ -79,7 +85,7 @@ jobs:
     name: Build iOS IPA
     runs-on: macos-latest
     outputs:
-      artifact-name: ${{ steps.set-output.outputs.artifact-name }}
+      artifact_name: ${{ steps.set_output.outputs.artifact_name }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -99,6 +105,11 @@ jobs:
           VERSION="${{ inputs.version }}"
           # Strip leading 'v' if present (e.g. v1.0.0 -> 1.0.0)
           VERSION="${VERSION#v}"
+          # Append run number as build number if no '+<build>' is present,
+          # so the Flutter build number increments with every CI run.
+          if [[ "${VERSION}" != *'+'* ]]; then
+            VERSION="${VERSION}+${{ github.run_number }}"
+          fi
           # macOS sed requires an explicit empty string for in-place editing
           sed -i '' "s/^version: .*/version: ${VERSION}/" pubspec.yaml
 
@@ -116,8 +127,8 @@ jobs:
           rm -rf Payload
 
       - name: Set artifact name output
-        id: set-output
-        run: echo "artifact-name=ai-explorer-ios" >> "$GITHUB_OUTPUT"
+        id: set_output
+        run: echo "artifact_name=ai-explorer-ios" >> "$GITHUB_OUTPUT"
 
       - name: Upload iOS artifact
         uses: actions/upload-artifact@v4
