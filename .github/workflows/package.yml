@@ -15,6 +15,9 @@ on:
       ios_artifact:
         description: 'Name of the uploaded iOS artifact'
         value: ${{ jobs.build_ios.outputs.artifact_name }}
+      web_artifact:
+        description: 'Name of the uploaded web artifact'
+        value: ${{ jobs.build_web.outputs.artifact_name }}
   workflow_dispatch:
     inputs:
       version:
@@ -135,4 +138,54 @@ jobs:
         with:
           name: ai-explorer-ios
           path: ai-explorer.ipa
+          retention-days: 7
+
+  build_web:
+    name: Build Web (zip)
+    runs-on: ubuntu-latest
+    outputs:
+      artifact_name: ${{ steps.set_output.outputs.artifact_name }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Override version in pubspec.yaml
+        if: ${{ inputs.version != '' }}
+        run: |
+          VERSION="${{ inputs.version }}"
+          # Strip leading 'v' if present (e.g. v1.0.0 -> 1.0.0)
+          VERSION="${VERSION#v}"
+          # Append run number as build number if no '+<build>' is present
+          if [[ "${VERSION}" != *'+'* ]]; then
+            VERSION="${VERSION}+${{ github.run_number }}"
+          fi
+          sed -i "s/^version: .*/version: ${VERSION}/" pubspec.yaml
+
+      - name: Build web (release)
+        run: flutter build web --release
+
+      - name: Package web build as zip
+        run: |
+          cd build/web
+          zip -r ../../ai-explorer-web.zip .
+          cd ../..
+
+      - name: Set artifact name output
+        id: set_output
+        run: echo "artifact_name=ai-explorer-web" >> "$GITHUB_OUTPUT"
+
+      - name: Upload web artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-explorer-web
+          path: ai-explorer-web.zip
           retention-days: 7

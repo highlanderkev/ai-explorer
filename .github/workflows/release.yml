@@ -44,6 +44,12 @@ jobs:
           name: ${{ needs.package.outputs.ios_artifact }}
           path: dist/
 
+      - name: Download web artifact
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: ${{ needs.package.outputs.web_artifact }}
+          path: dist/
+
       - name: Extract changelog entry
         id: changelog
         run: |
@@ -71,3 +77,4 @@ jobs:
           files: |
             dist/ai-explorer.apk
             dist/ai-explorer.ipa
+            dist/ai-explorer-web.zip
