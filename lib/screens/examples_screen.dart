@@ -16,7 +16,8 @@ class ExamplesScreen extends StatelessWidget {
           _buildExampleCard(
             context,
             title: 'Dynamic Form Generation',
-            description: 'AI can generate forms with various input fields based on your requirements',
+            description:
+                'AI can generate forms with various input fields based on your requirements',
             icon: Icons.edit_note,
             example: '''
 Example prompt: "Create a contact form with name, email, and message fields"
@@ -49,7 +50,8 @@ The AI will generate:
           _buildExampleCard(
             context,
             title: 'Travel Booking',
-            description: 'Create booking interfaces with date pickers and selection controls',
+            description:
+                'Create booking interfaces with date pickers and selection controls',
             icon: Icons.flight,
             example: '''
 Example prompt: "Create a flight booking interface"
@@ -66,7 +68,8 @@ The AI will generate:
           _buildExampleCard(
             context,
             title: 'Data Visualization',
-            description: 'Generate charts and graphs based on data requirements',
+            description:
+                'Generate charts and graphs based on data requirements',
             icon: Icons.bar_chart,
             example: '''
 Example prompt: "Show me sales data for the last quarter"
@@ -97,7 +100,7 @@ The AI will generate:
           const SizedBox(height: 24),
           Card(
             color: Theme.of(context).colorScheme.primary,
-            child: Padding(
+            child: const Padding(
               padding: EdgeInsets.all(16),
               child: Column(
                 children: [
