@@ -104,13 +104,13 @@ The AI will generate:
               padding: EdgeInsets.all(16),
               child: Column(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.lightbulb,
                     color: Colors.white,
                     size: 40,
                   ),
-                  SizedBox(height: 12),
-                  Text(
+                  const SizedBox(height: 12),
+                  const Text(
                     'How it Works',
                     style: TextStyle(
                       color: Colors.white,
@@ -118,9 +118,12 @@ The AI will generate:
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 8),
-                  Text(
-                    'GenUI uses Google\'s Gemini AI to understand your requirements and dynamically generate Flutter UI components. The AI selects from a catalog of available widgets and assembles them into a functional interface.',
+                  const SizedBox(height: 8),
+                  const Text(
+                    'GenUI uses Google\'s Gemini AI to understand your '
+                    'requirements and dynamically generate Flutter UI '
+                    'components. The AI selects from a catalog of available '
+                    'widgets and assembles them into a functional interface.',
                     style: TextStyle(color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
