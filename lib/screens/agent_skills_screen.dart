@@ -56,7 +56,7 @@ const List<SkillSource> _skillSources = [
   SkillSource(
     name: 'Anthropic Skills (GitHub)',
     description:
-        "Anthropic's official collection of pre-built skills and integrations for Claude-powered agents.",
+        'Anthropic\'s official collection of pre-built skills and integrations for Claude-powered agents.',
     url: 'https://github.com/anthropics/skills',
     icon: Icons.science,
   ),
