@@ -100,7 +100,7 @@ const List<AgentSkill> _featuredSkills = [
   ),
   AgentSkill(
     name: 'Image Analysis',
-    description: 'Analyse images, extract text via OCR, and describe visual content.',
+    description: 'Analyze images, extract text via OCR, and describe visual content.',
     category: 'Vision',
     sourceUrl: 'https://agentskills.io/home',
     tags: ['image', 'vision', 'ocr'],
@@ -121,7 +121,7 @@ const List<AgentSkill> _featuredSkills = [
   ),
   AgentSkill(
     name: 'Email & Messaging',
-    description: 'Send, receive, and summarise emails and chat messages.',
+    description: 'Send, receive, and summarize emails and chat messages.',
     category: 'Communication',
     sourceUrl: 'https://github.com/anthropics/skills',
     tags: ['email', 'messaging', 'communication'],
