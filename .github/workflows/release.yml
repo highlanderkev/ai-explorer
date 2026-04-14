@@ -35,13 +35,13 @@ jobs:
       - name: Download Android artifact
         uses: actions/download-artifact@v4.1.8
         with:
-          name: ${{ needs.package.outputs.android-artifact }}
+          name: ${{ needs.package.outputs['web-artifact'] }}
           path: dist/
 
-      - name: Download iOS artifact
+      - name: Download Android artifact
         uses: actions/download-artifact@v4.1.8
         with:
-          name: ${{ needs.package.outputs.ios-artifact }}
+          name: ${{ needs.package.outputs['android-artifact'] }}
           path: dist/
 
       - name: Extract changelog entry
@@ -49,7 +49,7 @@ jobs:
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           # Extract the section for this version from CHANGELOG.md
-          NOTES=$(awk "/^## \[${VERSION}\]/{flag=1; next} /^## \[/{flag=0} flag" CHANGELOG.md | sed '/^$/d' | head -50)
+          NOTES=$(awk -v version="$VERSION" '$0 == "## [" version "]" {flag=1; next} /^## \[/ {flag=0} flag' CHANGELOG.md | sed '/^$/d' | head -50)
           if [ -z "$NOTES" ]; then
             NOTES="Release ${VERSION}"
           fi
