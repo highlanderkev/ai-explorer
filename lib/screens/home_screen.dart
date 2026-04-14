@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'genui_chat_screen.dart';
 import 'examples_screen.dart';
+import 'agent_skills_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -12,65 +13,90 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('AI Explorer - GenUI Showcase'),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Icon(
-                Icons.auto_awesome,
-                size: 80,
-                color: Colors.deepPurple,
-              ),
-              const SizedBox(height: 24),
-              const Text(
-                'Welcome to AI Explorer',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'Showcasing Generative AI with GenUI and Firebase AI',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
-              ),
-              const SizedBox(height: 48),
-              _buildFeatureCard(
-                context,
-                icon: Icons.chat_bubble_outline,
-                title: 'GenUI Chat',
-                description: 'Experience dynamic UI generation through AI conversation',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const GenUIChatScreen(),
+      body: SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height -
+                AppBar().preferredSize.height -
+                MediaQuery.of(context).viewPadding.top,
+          ),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  const Icon(
+                    Icons.auto_awesome,
+                    size: 80,
+                    color: Colors.deepPurple,
+                  ),
+                  const SizedBox(height: 24),
+                  const Text(
+                    'Welcome to AI Explorer',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
                     ),
-                  );
-                },
-              ),
-              const SizedBox(height: 16),
-              _buildFeatureCard(
-                context,
-                icon: Icons.explore,
-                title: 'Examples',
-                description: 'Explore various GenUI capabilities and use cases',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ExamplesScreen(),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Showcasing Generative AI with GenUI and Firebase AI',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
                     ),
-                  );
-                },
+                  ),
+                  const SizedBox(height: 48),
+                  _buildFeatureCard(
+                    context,
+                    icon: Icons.chat_bubble_outline,
+                    title: 'GenUI Chat',
+                    description: 'Experience dynamic UI generation through AI conversation',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const GenUIChatScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  _buildFeatureCard(
+                    context,
+                    icon: Icons.explore,
+                    title: 'Examples',
+                    description: 'Explore various GenUI capabilities and use cases',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ExamplesScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  _buildFeatureCard(
+                    context,
+                    icon: Icons.extension,
+                    title: 'Agent Skills',
+                    description: 'Find and browse agent skills from leading AI platforms',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AgentSkillsScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
