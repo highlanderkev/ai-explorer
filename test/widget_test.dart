@@ -33,4 +33,29 @@ void main() {
     // Verify that we navigated to the examples screen
     expect(find.text('GenUI Examples'), findsOneWidget);
   });
+
+  testWidgets('Agent Skills card is present on home screen',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(const AIExplorerApp());
+
+    expect(find.text('Agent Skills'), findsOneWidget);
+    expect(
+      find.text('Find and browse agent skills from leading AI platforms'),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('Navigation to Agent Skills works', (WidgetTester tester) async {
+    await tester.pumpWidget(const AIExplorerApp());
+
+    // Tap the Agent Skills card
+    await tester.tap(find.text('Agent Skills'));
+    await tester.pumpAndSettle();
+
+    // Verify that we navigated to the Agent Skills screen
+    expect(find.text('Agent Skills'), findsOneWidget);
+    // Verify both tabs are rendered
+    expect(find.text('Browse Skills'), findsOneWidget);
+    expect(find.text('Sources'), findsOneWidget);
+  });
 }
