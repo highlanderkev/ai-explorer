@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'genui_chat_screen.dart';
 import 'examples_screen.dart';
+import 'agent_skills_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -66,6 +67,21 @@ class HomeScreen extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => const ExamplesScreen(),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 16),
+              _buildFeatureCard(
+                context,
+                icon: Icons.extension,
+                title: 'Agent Skills',
+                description: 'Find and browse agent skills from leading AI platforms',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AgentSkillsScreen(),
                     ),
                   );
                 },
