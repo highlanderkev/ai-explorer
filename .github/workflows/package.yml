@@ -9,12 +9,12 @@ on:
         type: string
         default: ''
     outputs:
-      web-artifact:
-        description: 'Name of the uploaded web artifact'
-        value: ${{ jobs.build_web.outputs.artifact-name }}
       android-artifact:
         description: 'Name of the uploaded Android artifact'
         value: ${{ jobs.build_android.outputs.artifact-name }}
+      ios-artifact:
+        description: 'Name of the uploaded iOS artifact'
+        value: ${{ jobs.build_ios.outputs.artifact-name }}
   workflow_dispatch:
     inputs:
       version:
@@ -26,51 +26,6 @@ permissions:
   contents: read
 
 jobs:
-  build_web:
-    name: Build Web
-    runs-on: ubuntu-latest
-    outputs:
-      artifact-name: ${{ steps.set-output.outputs.artifact-name }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          cache: true
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Override version in pubspec.yaml
-        if: ${{ inputs.version != '' }}
-        run: |
-          VERSION="${{ inputs.version }}"
-          # Strip leading 'v' if present (e.g. v1.0.0 -> 1.0.0)
-          VERSION="${VERSION#v}"
-          sed -i "s/^version: .*/version: ${VERSION}/" pubspec.yaml
-
-      - name: Build Flutter web
-        run: flutter build web --release
-
-      - name: Archive web build
-        run: |
-          cd build/web
-          zip -r ../../ai-explorer-web.zip .
-
-      - name: Set artifact name output
-        id: set-output
-        run: echo "artifact-name=ai-explorer-web" >> "$GITHUB_OUTPUT"
-
-      - name: Upload web artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ai-explorer-web
-          path: ai-explorer-web.zip
-          retention-days: 7
-
   build_android:
     name: Build Android APK
     runs-on: ubuntu-latest
@@ -118,4 +73,55 @@ jobs:
         with:
           name: ai-explorer-android
           path: ai-explorer.apk
+          retention-days: 7
+
+  build_ios:
+    name: Build iOS IPA
+    runs-on: macos-latest
+    outputs:
+      artifact-name: ${{ steps.set-output.outputs.artifact-name }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Override version in pubspec.yaml
+        if: ${{ inputs.version != '' }}
+        run: |
+          VERSION="${{ inputs.version }}"
+          # Strip leading 'v' if present (e.g. v1.0.0 -> 1.0.0)
+          VERSION="${VERSION#v}"
+          # macOS sed requires an explicit empty string for in-place editing
+          sed -i '' "s/^version: .*/version: ${VERSION}/" pubspec.yaml
+
+      - name: Build iOS (no code sign)
+        # Builds a release .app without code signing; suitable for CI artifacts.
+        # For App Store / TestFlight distribution, add signing certificates and
+        # use 'flutter build ipa' with appropriate provisioning profiles.
+        run: flutter build ios --release --no-codesign
+
+      - name: Package IPA
+        run: |
+          mkdir -p Payload
+          cp -r build/ios/iphoneos/Runner.app Payload/
+          zip -r ai-explorer.ipa Payload/
+          rm -rf Payload
+
+      - name: Set artifact name output
+        id: set-output
+        run: echo "artifact-name=ai-explorer-ios" >> "$GITHUB_OUTPUT"
+
+      - name: Upload iOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-explorer-ios
+          path: ai-explorer.ipa
           retention-days: 7

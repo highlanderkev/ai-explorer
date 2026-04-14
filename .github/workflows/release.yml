@@ -32,16 +32,16 @@ jobs:
           echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
 
-      - name: Download web artifact
-        uses: actions/download-artifact@v4.1.8
-        with:
-          name: ${{ needs.package.outputs.web-artifact }}
-          path: dist/
-
       - name: Download Android artifact
         uses: actions/download-artifact@v4.1.8
         with:
           name: ${{ needs.package.outputs.android-artifact }}
+          path: dist/
+
+      - name: Download iOS artifact
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: ${{ needs.package.outputs.ios-artifact }}
           path: dist/
 
       - name: Extract changelog entry
@@ -69,5 +69,5 @@ jobs:
           draft: false
           prerelease: ${{ contains(steps.version.outputs.tag, '-') }}
           files: |
-            dist/ai-explorer-web.zip
             dist/ai-explorer.apk
+            dist/ai-explorer.ipa
