@@ -13,6 +13,9 @@ permissions:
 jobs:
   build_and_preview:
     name: Build and Deploy Preview
+    # Secrets are not available for fork PRs, so skip preview deployment for them.
+    # For fork contributors, the production deploy on merge to main will still run.
+    if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
