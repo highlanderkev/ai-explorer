@@ -1,0 +1,84 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]*'
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    name: Build packages
+    uses: ./.github/workflows/package.yml
+    with:
+      version: ${{ github.ref_name }}
+
+  release:
+    name: Create GitHub Release
+    needs: package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          # Strip leading 'v'
+          VERSION="${TAG#v}"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Download Android artifact
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: ${{ needs.package.outputs.android_artifact }}
+          path: dist/
+
+      - name: Download iOS artifact
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: ${{ needs.package.outputs.ios_artifact }}
+          path: dist/
+
+      - name: Download web artifact
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: ${{ needs.package.outputs.web_artifact }}
+          path: dist/
+
+      - name: Extract changelog entry
+        id: changelog
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          # Extract the section for this version from CHANGELOG.md
+          NOTES=$(awk -v version="$VERSION" '
+            $0 ~ ("^## \\[" version "\\]($|[[:space:]].*)") { flag=1; next }
+            flag && /^## / { exit }
+            flag
+          ' CHANGELOG.md | sed '/^$/d' | head -50)
+          if [ -z "$NOTES" ]; then
+            NOTES="Release ${VERSION}"
+          fi
+          # Use a delimiter to safely pass multi-line output
+          {
+            echo "notes<<EOF"
+            echo "$NOTES"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: 'AI Explorer ${{ steps.version.outputs.tag }}'
+          body: ${{ steps.changelog.outputs.notes }}
+          draft: false
+          prerelease: ${{ contains(steps.version.outputs.tag, '-') }}
+          files: |
+            dist/ai-explorer.apk
+            dist/ai-explorer.ipa
+            dist/ai-explorer-web.zip
